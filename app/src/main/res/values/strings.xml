@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">My_Dialog_Exercise</string>
     <string name="save_data_button">Guardar</string>
-    <string name="clean_button">Borrar</string>
-    <string name="age_of_person">Edad</string>
-    <string name="name_of_person">Nombre</string>
-    <string name="text_of_button">Presionar</string>
-    <string name="cancel_button">cancelar</string>
-    <string name="show_data_button">show_data_button</string>
-    <string name="tittle_of_layout">Lista De Nombres</string>
+    <string name="show_records">Mostrar Records</string>
+    <string name="clear_records">Limpiar Records</string>
+    <string name="name_input">Nombre</string>
+    <string name="age_input">Edad</string>
+    <string name="email_input">Email</string>
+    <string name="text_of_button">Guardar</string>
+    <string name="title_of_layout">Lista De Nombres</string>
 </resources>

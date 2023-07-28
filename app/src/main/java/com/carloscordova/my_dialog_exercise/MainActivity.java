@@ -1,122 +1,118 @@
 package com.carloscordova.my_dialog_exercise;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDialog;
 import android.annotation.SuppressLint;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "mainActivity";
     private Button saveButton;
-    private Button resetButton;
+    private Button showRecordsButton;
+    private Button cleanRecordsButton;
     private EditText ageEditText;
     private EditText nameEditText;
-    private List<String> nameList = new ArrayList<>();
-    private List<String> ageList = new ArrayList<>();
+    private EditText emailEditText;
+    private List<String> list;
+
+    private Toast toast;
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "++ ON CREATE ++");
+        list = new ArrayList<>();
+        toast = new Toast(this);
         setContentView(R.layout.activity_main);
         saveButton = findViewById(R.id.save_data_button);
-        resetButton = findViewById(R.id.reset_button);
+        showRecordsButton = findViewById(R.id.show_button);
+        cleanRecordsButton = findViewById(R.id.clear_records);
         ageEditText = findViewById(R.id.age_option);
         nameEditText = findViewById(R.id.name_option);
-        InputFilter[] filtersName = new InputFilter[] { new AlphabetInputFilter() };
-        nameEditText.setFilters(filtersName);
-        InputFilter[] filtersAge = new InputFilter[] { new NumberInputFilter()};
-        ageEditText.setFilters(filtersAge);
-        int maxLengthLetter = 43;
-        int maxLengthNumber =2;
-        nameEditText.setFilters(new InputFilter[] { new AlphabetInputFilter(), new InputFilter.LengthFilter(maxLengthLetter) });
-        ageEditText.setFilters(new InputFilter[] { new NumberInputFilter(), new InputFilter.LengthFilter(maxLengthNumber) });
-        saveButton.setOnClickListener(v -> showPopupDialog());
-        resetButton.setOnClickListener(view -> clearEditTextFields());
-    }
-    //editamos los filters a los editTexts
-    private class AlphabetInputFilter implements InputFilter {
-        @Override
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-            StringBuilder stringBuilderA = new StringBuilder();
-            for (int i = start; i < end; i++) {
-                char character = source.charAt(i);
-                if (Character.isLetter(character)) {
-                    stringBuilderA.append(character);
-                }
-            }
-            return stringBuilderA.toString();
-        }
-    }
-    private class NumberInputFilter implements InputFilter {
-        @Override
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-            StringBuilder stringBuilderN = new StringBuilder();
-            for (int i = start; i < end; i++) {
-                char character = source.charAt(i);
-                if (Character.isDigit(character)) {
-                    stringBuilderN.append(character);
-                }
-            }
-            return stringBuilderN.toString();
-        }
+        emailEditText = findViewById(R.id.email_option);
+        saveButton.setOnClickListener(v -> saveFormValues());
+        showRecordsButton.setOnClickListener(view -> showDialod());
+        cleanRecordsButton.setOnClickListener(v -> {
+            toast.setText("Deleted records : " + list.size());
+            toast.show();
+            // TODO: do something with the variable list to clear all the items;
+            assert list.isEmpty();
+        });
     }
     private void clearEditTextFields() {
         nameEditText.setText("");
         ageEditText.setText("");
+        emailEditText.setText("");
     }
-    //funciones de pop_up_layout
-    private void showPopupDialog() {
-        AppCompatDialog dialog = new AppCompatDialog(this);
-        dialog.setContentView(R.layout.pop_up_layout);
-        String name = nameEditText.getText().toString();
-        String age = ageEditText.getText().toString();
-        nameList.add(name);
-        ageList.add(age);
-        TextView nameTextView = dialog.findViewById(R.id.popup_name_textview);
-        TextView ageTextView = dialog.findViewById(R.id.popup_age_textview);
-        Button closeButton = dialog.findViewById(R.id.popup_ok_button);
-        Button eliminarButton = dialog.findViewById(R.id.popup_eliminar_button);
+    private void saveFormValues() {
+        boolean isNameValid = false;
+        boolean isEmailValid = false;
+        boolean isAgeValid = false;
 
-        StringBuilder namesBuilder = new StringBuilder();
-        StringBuilder agesBuilder = new StringBuilder();
-        for (int i = 0; i < nameList.size(); i++) {
-            namesBuilder.append("Nombre ").append(i + 1).append(": ").append(nameList.get(i)).append("\n");
-            agesBuilder.append("Edad ").append(i + 1).append(": ").append(ageList.get(i)).append("\n");
+        String emailString = emailEditText.getText().toString();
+        String ageString = ageEditText.getText().toString();
+        String nameString = nameEditText.getText().toString();
+
+        if(isValidEmail(emailString)) {
+            isEmailValid = true;
+        } else {
+            toast.setText("error message here for invalid email");
+            toast.show();
         }
-        nameTextView.setText(namesBuilder.toString());
-        ageTextView.setText(agesBuilder.toString());
+        if(isValidName(nameString)) {
+            isNameValid = true;
+        } else {
+            toast.setText("error message here for invalid name");
+            toast.show();
+        }
+        if(isAgeValid(ageString)) {
+            isAgeValid = true;
+        } else {
+            toast.setText("error message here for invalid age");
+            toast.show();
+        }
+        if(isNameValid && isEmailValid && isAgeValid) {
+            list.add(nameString + " : " + emailString + " : " + ageString);
+            clearEditTextFields();
+        }
+    }
 
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                clearEditTextFields();
-            }
+    private void showDialod() {
+        StringBuilder sb = new StringBuilder();
+        list.forEach( str-> {
+            sb.append(str);
+            sb.append("\n");
         });
-        eliminarButton.setOnClickListener(view -> {
-            if (!nameList.isEmpty()) {
-                nameList.remove(nameList.size() - 1);
-            }
-            if (!ageList.isEmpty()) {
-                ageList.remove(ageList.size() - 1);
-            }
-            StringBuilder namesBuilder1 = new StringBuilder();
-            StringBuilder agesBuilder1 = new StringBuilder();
-            for (int i = 0; i < nameList.size(); i++) {
-                namesBuilder1.append("Nombre ").append(i + 1).append(": ").append(nameList.get(i)).append("\n");
-                agesBuilder1.append("Edad ").append(i + 1).append(": ").append(ageList.get(i)).append("\n");
-            }
-            nameTextView.setText(namesBuilder1.toString());
-            ageTextView.setText(agesBuilder1.toString());
-        });
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Records");
+        builder.setMessage(sb.toString());
+        builder.setPositiveButton("Aceptar", null);
+        AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private boolean isValidEmail(String email){
+        //TODO
+        // validate here if email contains [@] and has at least one [.] character and length is at least 5 characters,
+        // then resolve as true otherwise is false
+        return false;
+    }
+    private boolean isValidName(String name){
+        //TODO
+        // validate here if name length is not empty , and has at least 3 characters
+        // then resolve as true otherwise is false
+        return false;
+    }
+    private boolean isAgeValid(String age){
+        //TODO
+        // validate here if age is greater of equals thatn 18 and less than 99
+        // then resolve as true otherwise is false
+        // This is a string you need to parse it from string to int
+        return false;
     }
 }

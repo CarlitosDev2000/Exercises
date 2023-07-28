@@ -9,7 +9,7 @@
         android:id="@+id/Name_of_tittle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/tittle_of_layout"
+        android:text="@string/title_of_layout"
         android:textAlignment="center"
         android:textSize="35sp" />
 
@@ -17,7 +17,15 @@
         android:id="@+id/name_option"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:hint="@string/name_of_person"
+        android:hint="@string/name_input"
+        android:textAlignment="center"
+        android:maxLength="43"
+        android:textSize="21sp" />
+    <EditText
+        android:id="@+id/email_option"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:hint="@string/email_input"
         android:textAlignment="center"
         android:maxLength="43"
         android:textSize="21sp" />
@@ -26,7 +34,7 @@
         android:inputType="number"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:hint="@string/age_of_person"
+        android:hint="@string/age_input"
         android:textAlignment="center"
         android:textSize="20sp" />
     <LinearLayout
@@ -43,11 +51,24 @@
             android:text="@string/save_data_button"
             android:textSize="20sp" />
         <Button
-            android:id="@+id/reset_button"
+            android:id="@+id/show_button"
             android:layout_width="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_height="wrap_content"
-            android:text="@string/clean_button"
+            android:text="@string/show_records"
+            android:textSize="20sp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/clear_records"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/clear_records"
             android:textSize="20sp" />
     </LinearLayout>
 
