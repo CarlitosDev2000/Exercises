@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             saveFormValues();
 
         });
-        showRecordsButton.setOnClickListener(view -> showDialog());
+        showRecordsButton.setOnClickListener(view -> renderListViewWithData());
         cleanRecordsButton.setOnClickListener(v -> {
             showToast("Deleted records" + list.size());
             list.clear();
@@ -79,21 +79,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showDialog() {
-        StringBuilder sb = new StringBuilder();
-        list.forEach( str-> {
-            sb.append(str);
-            sb.append("\n");
-        });
-        if (sb.length() == 0) {
-            sb.append("No hay registros disponibles");
-        }
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Records");
-        builder.setMessage(sb.toString());
-        builder.setPositiveButton("Aceptar", null);
-        AlertDialog dialog = builder.create();
-        dialog.show();
+    private void renderListViewWithData() {
+       //TODO aqui es donde pasamos la lista al arrayAdaptor, utilizamos la lista
     }
 
     private boolean isValidEmail(String email){
