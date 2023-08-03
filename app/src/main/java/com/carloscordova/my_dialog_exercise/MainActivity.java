@@ -39,13 +39,8 @@ public class MainActivity extends AppCompatActivity {
         });
         showRecordsButton.setOnClickListener(view -> showDialog());
         cleanRecordsButton.setOnClickListener(v -> {
-            if (list.isEmpty()){
-                showToast("no records to show");
-            }else
             showToast("Deleted records" + list.size());
-            // TODO: do something with the variable list to clear all the items;
             list.clear();
-            assert list.isEmpty();
         });
     }
     private void clearEditTextFields() {
@@ -65,17 +60,17 @@ public class MainActivity extends AppCompatActivity {
         if(isValidEmail(emailString)) {
             isEmailValid = true;
         } else {
-            emailEditText.setError("put your true email");
+            emailEditText.setError("Invalid email");
         }
         if(isValidName(nameString)) {
             isNameValid = true;
         } else {
-            nameEditText.setError("put correct your name");
+            nameEditText.setError("Invalid name");
         }
         if(isAgeValid(ageString)) {
             isAgeValid = true;
         } else {
-            ageEditText.setError("put your real age");
+            ageEditText.setError("Invalid age");
         }
         if(isNameValid && isEmailValid && isAgeValid) {
             list.add(nameString + " : " + emailString + " : " + ageString);
@@ -102,36 +97,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isValidEmail(String email){
-        //TODO
-        // validate here if email contains [@] and has at least one [.] character and length is at least 5 characters,
-        // then resolve as true otherwise is false
-        if (!email.contains("@") && !email.contains(".")) {
-            showToast("Falta los simbolos @ o . en el email.");
-            return false;
-        } if (email.length() < 5 || email.length() > 40) {
-            showToast("El email debe tener entre 5 y 40 caracteres.");
-            return false;
-        }else
-            return true;
+        if (email.length() >= 6 && email.contains("@") && email.contains(".")) {
+            int firstIndexAt = email.indexOf("@");
+            int lastIndexAt = email.lastIndexOf("@");
+            if (firstIndexAt == lastIndexAt && firstIndexAt > 0 && lastIndexAt < email.length()-4) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        showToast("email tiene que ser mayor que 6 chars  o falta el arroba o el punto");
+        return false;
     }
     private boolean isValidName(String name){
-        //TODO
-        // validate here if name length is not empty , and has at least 3 characters
-        // then resolve as true otherwise is false
         if (name.length() >= 3 && name.length() <= 20){
             return true;
-        }else
+        }else {
             showToast("nombre debe tiene que tener de 3 a 20 caracteres");
             return false;
+        }
     }
-    private boolean isAgeValid(String age){
-        //TODO
-        // validate here if age is greater of equals thatn 18 and less than 99
-        // then resolve as true otherwise is false
-        // This is a string you need to parse it from string to int
+    private boolean isAgeValid(String ageParan){
         try {
-            int ageValues = Integer.parseInt(age);
-            return ageValues >= 18 && ageValues < 99 && !age.isEmpty();
+            int age = Integer.parseInt(ageParan);
+            return age >= 18 && age < 99;
         } catch (NumberFormatException ega){
             showToast("numero incorrecto");
             return false;
