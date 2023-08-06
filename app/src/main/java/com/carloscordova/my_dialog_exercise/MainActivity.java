@@ -3,9 +3,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -18,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText ageEditText;
     private EditText nameEditText;
     private EditText emailEditText;
-    private List<String> list;
+    private List<User> list;
+    private CustomUsersAdapter customUsersAdapter;
 
     @SuppressLint("ResourceType")
     @Override
@@ -26,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "++ ON CREATE ++");
         list = new ArrayList<>();
+        customUsersAdapter = new CustomUsersAdapter(this, (ArrayList<User>) list);
         setContentView(R.layout.activity_main);
         saveButton = findViewById(R.id.save_data_button);
         showRecordsButton = findViewById(R.id.show_button);
@@ -73,14 +78,27 @@ public class MainActivity extends AppCompatActivity {
             ageEditText.setError("Invalid age");
         }
         if(isNameValid && isEmailValid && isAgeValid) {
-            list.add(nameString + " : " + emailString + " : " + ageString);
-            showToast("Added records.");
+            User newUser = new User(nameString, Integer.parseInt(ageString), emailString);
+            list.add(newUser);
             clearEditTextFields();
+
         }
     }
 
     private void renderListViewWithData() {
        //TODO aqui es donde pasamos la lista al arrayAdaptor, utilizamos la lista
+
+        CustomUsersAdapter adapter = new CustomUsersAdapter(this, list);
+        View listViewLayout = getLayoutInflater().inflate(R.layout.activity_list_view, null);
+
+        // Obtener la referencia al ListView en el nuevo diseño
+        ListView listView = listViewLayout.findViewById(R.id.view);
+
+        // Obtener la referencia al ListView
+        ListView listView = findViewById(R.id.lvUsers);
+
+        // Asignar el adaptador al ListView
+        listView.setAdapter(adapter);
 
     }
 

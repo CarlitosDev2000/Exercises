@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">My_Dialog_Exercise</string>
     <string name="save_data_button">Guardar</string>
-    <string name="show_records">Mostrar Records</string>
-    <string name="clear_records">Limpiar Records</string>
+    <string name="show_records">Records</string>
+    <string name="clear_records">Borrar</string>
     <string name="name_input">Nombre</string>
     <string name="age_input">Edad</string>
     <string name="email_input">Email</string>
