@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void renderListViewWithData() {
        //TODO aqui es donde pasamos la lista al arrayAdaptor, utilizamos la lista
+
     }
 
     private boolean isValidEmail(String email){
