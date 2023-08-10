@@ -1,18 +1,13 @@
 package com.carloscordova.my_dialog_exercise;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
-import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "mainActivity";
     private Button saveButton;
@@ -21,16 +16,11 @@ public class MainActivity extends AppCompatActivity {
     private EditText ageEditText;
     private EditText nameEditText;
     private EditText emailEditText;
-    private List<User> list;
-    private CustomUsersAdapter customUsersAdapter;
-
-    @SuppressLint("ResourceType")
+    private ArrayList<User> list = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "++ ON CREATE ++");
-        list = new ArrayList<>();
-        customUsersAdapter = new CustomUsersAdapter(this, (ArrayList<User>) list);
         setContentView(R.layout.activity_main);
         saveButton = findViewById(R.id.save_data_button);
         showRecordsButton = findViewById(R.id.show_button);
@@ -40,9 +30,9 @@ public class MainActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.email_option);
         saveButton.setOnClickListener(v -> {
             saveFormValues();
-
         });
-        showRecordsButton.setOnClickListener(view -> renderListViewWithData());
+        showRecordsButton.setOnClickListener(view -> renderListViewWithData()
+        );
         cleanRecordsButton.setOnClickListener(v -> {
             showToast("Deleted records" + list.size());
             list.clear();
@@ -57,16 +47,9 @@ public class MainActivity extends AppCompatActivity {
         boolean isNameValid = false;
         boolean isEmailValid = false;
         boolean isAgeValid = false;
-
-        String emailString = emailEditText.getText().toString();
-        String ageString = ageEditText.getText().toString();
         String nameString = nameEditText.getText().toString();
-
-        if(isValidEmail(emailString)) {
-            isEmailValid = true;
-        } else {
-            emailEditText.setError("Invalid email");
-        }
+        String ageString = ageEditText.getText().toString();
+        String emailString = emailEditText.getText().toString();
         if(isValidName(nameString)) {
             isNameValid = true;
         } else {
@@ -77,31 +60,24 @@ public class MainActivity extends AppCompatActivity {
         } else {
             ageEditText.setError("Invalid age");
         }
+        if(isValidEmail(emailString)) {
+            isEmailValid = true;
+        } else {
+            emailEditText.setError("Invalid email");
+        }
         if(isNameValid && isEmailValid && isAgeValid) {
-            User newUser = new User(nameString, Integer.parseInt(ageString), emailString);
-            list.add(newUser);
+            int age = Integer.parseInt(ageString);
+            User user = new User(emailString, age, nameString);
+            list.add(user);
             clearEditTextFields();
-
         }
     }
-
     private void renderListViewWithData() {
        //TODO aqui es donde pasamos la lista al arrayAdaptor, utilizamos la lista
-
-        CustomUsersAdapter adapter = new CustomUsersAdapter(this, list);
-        View listViewLayout = getLayoutInflater().inflate(R.layout.activity_list_view, null);
-
-        // Obtener la referencia al ListView en el nuevo diseño
-        ListView listView = listViewLayout.findViewById(R.id.view);
-
-        // Obtener la referencia al ListView
-        ListView listView = findViewById(R.id.lvUsers);
-
-        // Asignar el adaptador al ListView
-        listView.setAdapter(adapter);
-
+        Intent intent = new Intent(MainActivity.this, UserListActivity.class);
+        intent.putParcelableArrayListExtra("userList", list);
+        startActivity(intent);
     }
-
     private boolean isValidEmail(String email){
         if (email.length() >= 6 && email.contains("@") && email.contains(".")) {
             int firstIndexAt = email.indexOf("@");
